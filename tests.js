@@ -3,7 +3,7 @@ var should = require('chai').should();
 var request = require('supertest');
 var leveldown = require('leveldown');
 
-describe('server', function() {
+describe('API', function() {
 
   var app;
   var db;
@@ -96,6 +96,24 @@ describe('server', function() {
           });
         }
       });
+  });
+
+});
+
+describe('fetcher', function() {
+
+  var fetch;
+
+  before(function() {
+    fetch = require('./fetcher');
+  });
+
+  it('should fetch html', function(done) {
+    fetch('www.google.com', function(result) {
+      result.should.be.a('string');
+      result.slice(result.length - 7).should.equal('</html>');
+      done();
+    });
   });
 
 });
