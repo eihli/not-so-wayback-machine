@@ -1,3 +1,7 @@
+// Instead of just returning the app, we return
+// a setup function that lets us pass in a database.
+// This way we can connect to a test or staging or
+// production database depending on the environment.
 function setupApp(db) {
   var express = require('express');
   var app = express();

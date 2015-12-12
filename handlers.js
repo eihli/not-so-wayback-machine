@@ -1,3 +1,11 @@
+// Instead of just returning the handlers
+// we use a setup function that lets us pass
+// in a database. This way we can use a separate
+// database for testing.
+
+// We are using uuids for unlimited horizontal scalability!
+var uuid = require('node-uuid');
+
 function setupHandlers(db) {
 
   var handlers = {
@@ -20,10 +28,14 @@ function setupHandlers(db) {
   }
 
   function createJob(req, res, next) {
+    var job_id = uuid.v1();
     var job = {
-      url: req.params.url
+      url: req.params.url,
+      status: 'pending',
+      created_at: Date.now(),
+      fetched_at: null
     };
-    db.put(job.url, "pending");
+    db.put(job_id, job);
     res.status(200).send(job);
   }
 

@@ -77,12 +77,14 @@ describe('server', function() {
           console.log("Error at post:", err);
           done();
         } else {
-          db.get('www.google.com', function(err, value) {
+          db.find('url', 'www.google.com', function(err, result) {
             if (err) {
+              console.log(err);
               err.notFound.should.equal(false, 'Key not found');
               done();
             } else {
-              value.should.equal('pending');
+              result.value.url.should.equal('www.google.com');
+              result.value.status.should.equal('pending');
               done();
             }
           });
