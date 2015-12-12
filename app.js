@@ -1,9 +1,9 @@
 var express = require('express');
 var app = express();
+var handlers = require('./handlers');
+var routes = require('./routes');
 
-app.get('/', function(req, res, next) {
-  res.send("hello world");
-});
+routes(app, handlers);
 
 function start(port) {
   port = process.env.PORT || port || 3000;
