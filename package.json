@@ -1,0 +1,33 @@
+{
+  "name": "not-so-wayback-machine",
+  "version": "0.0.1",
+  "description": "Massdrop Coding Challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eihli/not-so-wayback-machine.git"
+  },
+  "author": "Eric Ihli",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eihli/not-so-wayback-machine/issues"
+  },
+  "homepage": "https://github.com/eihli/not-so-wayback-machine#readme",
+  "dependencies": {
+    "express": "^4.13.3"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha": "^0.4.15",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^2.3.4",
+    "supertest": "^1.1.0"
+  }
+}
