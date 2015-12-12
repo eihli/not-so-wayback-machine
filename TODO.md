@@ -8,7 +8,9 @@
   - ~~Everything else should respond 404~~
 - ~~POST to /v1/job/:url should respond with useful information~~
 - ~~POST should save something to database~~
-- POST should save correct info to database
+- ~~POST should save correct info to database~~
+- Pull out DB config (valueEncoding: 'json')
+- Pull tests out into separate files
 
 ## Engineering Tasks
 

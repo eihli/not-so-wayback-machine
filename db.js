@@ -3,8 +3,11 @@ var levelup = require('level');
 var createConnection = function(dbPath) {
   var db = levelup(dbPath, {valueEncoding: 'json'});
 
-  db.find = function(key, value, cb) {
-    var result;
+  db.find = find;
+  db.findAll = findAll;
+
+  function find(key, value, cb) {
+    var result = null;
     db.createReadStream()
       .on('data', function(data) {
         if (data.value[key] === value) {
@@ -15,13 +18,26 @@ var createConnection = function(dbPath) {
         console.log(err);
       })
       .on('end', function() {
-        if (result) {
-          cb(null, result);
-        } else {
-          cb("Not found");
-        }
+        cb(result);
       });
-  };
+  }
+
+  function findAll(key, value, cb) {
+    var results = [];
+    db.createReadStream()
+      .on('data', function(data) {
+        if (data.value[key] === value) {
+          results.push(data);
+        }
+      })
+      .on('error', function(err) {
+        console.log(err);
+      })
+      .on('end', function() {
+        cb(results);
+      });
+  }
+
   return db;
 };
 
