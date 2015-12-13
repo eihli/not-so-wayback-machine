@@ -12,7 +12,7 @@ Example: User submits www.google.com to your endpoint. The user gets back a job 
 
 ## API
 
-### `GET /v1/site/:url`
+### `GET /v1/html/:url`
 
 Retrieve job.
 
@@ -49,6 +49,8 @@ Returns:
 Pending URLs will be fetched on a set interval.
 
 ### `GET /v1/job/:id`
+
+Returns same object as `GET /v1/html/url` but is a faster lookup. In the future if we handle archiving multiple versions of the HTML, then the /html/url route should give us the latest and this route should give us a specific version of it.
 
 Retrieve object representing job.
 

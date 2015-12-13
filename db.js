@@ -1,5 +1,6 @@
 var levelup = require('level');
 
+// TODO: Pull out dbConfig. Should contain path and options.
 var createConnection = function(dbPath) {
   var db = levelup(dbPath, {valueEncoding: 'json'});
 
