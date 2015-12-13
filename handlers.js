@@ -16,11 +16,11 @@ function setupHandlers(db) {
   };
 
   function getJobQueue(req, res, next) {
-    res.send(200);
+    res.status(200).send();
   }
 
   function getJob(req, res, next) {
-    res.send(200);
+    res.status(200).send();
   }
 
   function getHtml(req, res, next) {
@@ -32,6 +32,7 @@ function setupHandlers(db) {
     var job = {
       url: req.params.url,
       status: 'pending',
+      html: null,
       created_at: Date.now(),
       fetched_at: null
     };

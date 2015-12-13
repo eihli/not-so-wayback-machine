@@ -7,7 +7,7 @@ var createConnection = function(dbPath) {
   db.findAll = findAll;
 
   function find(key, value, cb) {
-    var result = null;
+    var result = '';
     db.createReadStream()
       .on('data', function(data) {
         if (data.value[key] === value) {
@@ -15,10 +15,10 @@ var createConnection = function(dbPath) {
         }
       })
       .on('error', function(err) {
-        console.log(err);
+        cb(err);
       })
       .on('end', function() {
-        cb(result);
+        cb(null, result);
       });
   }
 

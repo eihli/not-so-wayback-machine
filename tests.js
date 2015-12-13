@@ -31,32 +31,42 @@ describe('API', function() {
       function(cb) {
         request(app)
           .get('/v1/job/1')
-          .expect(200);
-        cb(null);
+          .expect(200)
+          .end(function(err, res) {
+            cb(null);
+          });
       },
       function(cb) {
         request(app)
           .get('/v1/job')
-          .expect(200);
-        cb(null);
+          .expect(200)
+          .end(function(err, res) {
+            cb(null);
+          });
       },
       function(cb) {
         request(app)
           .post('/v1/job/url')
-          .expect(201);
-        cb(null);
+          .expect(201)
+          .end(function(err, res) {
+            cb(null);
+          });
       },
       function(cb) {
         request(app)
           .get('/garbage')
-          .expect(404);
-        cb(null);
+          .expect(404)
+          .end(function(err, res) {
+            cb(null);
+          });
       },
       function(cb) {
         request(app)
           .post('/garbage')
-          .expect(404);
-        cb(null);
+          .expect(404)
+          .end(function(err, res) {
+            cb(null);
+          });
       }
     ], done);
   });
@@ -83,9 +93,9 @@ describe('API', function() {
           console.log("Error at post:", err);
           done();
         } else {
-          db.find('url', 'www.google.com', function(result) {
+          db.find('url', 'www.google.com', function(err, result) {
             if (result === null) {
-              console.log(result);
+              // console.log(result);
               result.should.equal('Key/Value pair not found.');
               done();
             } else {
@@ -102,18 +112,47 @@ describe('API', function() {
 
 describe('fetcher', function() {
 
+  var fetcher;
   var fetch;
+  var app;
+  var db;
 
-  before(function() {
-    fetch = require('./fetcher');
-  });
-
-  it('should fetch html', function(done) {
-    fetch('www.google.com', function(result) {
-      result.should.be.a('string');
-      result.slice(result.length - 7).should.equal('</html>');
+  before(function(done) {
+    leveldown.destroy('./db/test', function() {
+      db = require('./db')('./db/test');
+      fetcher = require('./fetcher')(db);
+      fetch = fetcher.fetch;
       done();
     });
+  });
+
+  after(function(done) {
+    db.close(done);
+  });
+
+  beforeEach(function() {
+    app = require('./app');
+    app = app(db).app;
+  });
+
+  // TODO: Mock? Serve up something local?
+
+  it('should fetch html and save to database', function(done) {
+    request(app)
+      .post('/v1/job/www.google.com')
+      .end(function(err, res) {
+        fetch('www.google.com', function(err, res) {
+          if (err) {
+            console.log(err);
+          } else {
+            db.find('url', 'www.google.com', function(err, site) {
+              site.value.html.should.be.a('string');
+              site.value.html.slice(site.value.html.length - 7).should.equal('</html>');
+              done();
+            });
+          }
+        });
+      });
   });
 
 });
