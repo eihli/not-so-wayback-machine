@@ -76,7 +76,7 @@ describe('API', function() {
       .post('/v1/job/www.google.com')
       .end(function(err, res) {
         if (err) {
-          console.log("Error in response", err);
+          console.log(err);
         } else {
           res.body.should.have.property('url');
           res.body.url.should.equal('www.google.com');
@@ -90,7 +90,7 @@ describe('API', function() {
       .post('/v1/job/www.google.com')
       .end(function(err, res) {
         if (err) {
-          console.log("Error at post:", err);
+          console.log(err);
           done();
         } else {
           db.find('url', 'www.google.com', function(err, result) {
@@ -212,15 +212,25 @@ describe('database', function() {
     db.put('3', {'name': 'taylor'});
     async.parallel([
       function(cb) {
-        db.findAll('name', 'eric', function(result) {
-          result.length.should.equal(2);
-          cb(null);
+        db.findAll('name', 'eric', function(err, result) {
+          if (err) {
+            console.log(err);
+            cb(err);
+          } else {
+            result.length.should.equal(2);
+            cb(null, result);
+          }
         });
       },
       function(cb) {
-        db.findAll('name', 'taylor', function(result) {
-          result.length.should.equal(1);
-          cb(null);
+        db.findAll('name', 'taylor', function(err, result) {
+          if (err) {
+            console.log(err);
+            cb(err);
+          } else {
+            result.length.should.equal(1);
+            cb(null, result);
+          }
         });
       }
     ], done);

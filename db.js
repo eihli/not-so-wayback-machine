@@ -34,7 +34,7 @@ var createConnection = function(dbPath) {
         console.log(err);
       })
       .on('end', function() {
-        cb(results);
+        cb(null, results);
       });
   }
 
