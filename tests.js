@@ -95,13 +95,39 @@ describe('API', function() {
         } else {
           db.find('url', 'www.google.com', function(err, result) {
             if (result === null) {
-              // console.log(result);
               result.should.equal('Key/Value pair not found.');
               done();
             } else {
               result.value.url.should.equal('www.google.com');
               result.value.status.should.equal('pending');
               done();
+            }
+          });
+        }
+    });
+  });
+
+  // TODO: Promises!
+  it('should return correct status of fetched url', function(done) {
+    var fetch = require('./fetcher')(db).fetch;
+    request(app)
+      .post('/v1/job/www.google.com')
+      .end(function(err, res) {
+        if (err) {
+          console.log(err);
+          done();
+        } else {
+          fetch('www.google.com', function(err, res) {
+            if (err) {
+              console.log(err);
+              done();
+            } else {
+              request(app)
+                .get('/v1/html/www.google.com')
+                .end(function(err, res) {
+                  res.body.value.status.should.equal('completed');
+                  done();
+                });
             }
           });
         }

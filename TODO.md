@@ -18,3 +18,10 @@
 - Root folder is getting kind of cluttered. Maybe factor out into subfolders soon
 - Decide on 'schema'
 - Create db.find() method and other helper methods
+
+## Requirements
+
+- Create a worker to fetch HTML from url and store in database
+- Expose REST API for:
+  - Adding jobs
+  - Checking status/results

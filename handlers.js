@@ -24,7 +24,15 @@ function setupHandlers(db) {
   }
 
   function getHtml(req, res, next) {
-    res.send(200);
+    var url = req.params.url;
+    db.find('url', url, function(err, data) {
+      if (err) {
+        console.log(err);
+        res.status(404).send();
+      } else {
+        res.status(200).send(data);
+      }
+    });
   }
 
   function createJob(req, res, next) {

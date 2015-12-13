@@ -27,7 +27,6 @@ function setupFetcher(db) {
       cb(err);
     })
     .end();
-
   }
 
   function fetch(url, cb) {
@@ -40,9 +39,9 @@ function setupFetcher(db) {
             cb(err);
           } else {
             site.value.html = html;
-            site.fetched_at = Date.now();
-            site.status = 'completed';
-            db.put(site.key, site.value, {sync: true}, function() {
+            site.value.fetched_at = Date.now();
+            site.value.status = 'completed';
+            db.put(site.key, site.value, function() {
               cb(null, site);
             });
           }
