@@ -1,12 +1,8 @@
-# Massdrop Coding Challenge
-
-## The Not So Wayback Machine
+# The Not So Wayback Machine
 
 Create a job queue whose workers fetch data from a URL and store the results in a database. The job queue should expose a REST API for adding jobs and checking their status/results.
 
 Example: User submits www.google.com to your endpoint. The user gets back a job id. Your system fetches www.google.com (the result of which would be HTML) and stores the result. The user asks for the status of the job id and if the job is complete, he gets a response that includes the HTML for www.google.com.
-
-Use any tech you want. Put the code in a gist or on GitHub.
 
 ## Initial Design Thoughts
 
@@ -16,18 +12,58 @@ Use any tech you want. Put the code in a gist or on GitHub.
 
 ## API
 
+### `GET /v1/site/:url`
+
+Retrieve job.
+
+Returns:
+
+    {
+      "key": "d5f5b850-a134-11e5-afeb-77f3a90da967", // uuid.v1()
+      "value": {
+        "url": "www.google.com",
+        "status": "completed", // completed | pending
+        "html": "<!DOCTYPE html>...</html>",
+        "created_at": 1449968400470,
+        "fetched_at": 1449968402017
+      }
+    }
+
+### `POST /v1/job/:url`
+
+Create new job.
+
+Returns:
+
+    {
+      "key": "d5f5b850-a134-11e5-afeb-77f3a90da967", // uuid.v1()
+      "value": {
+        "url": "www.google.com",
+        "status": "pending", // completed | pending
+        "html": null,
+        "created_at": 1449968400470,
+        "fetched_at": null
+      }
+    }
+
+Pending URLs will be fetched on a set interval.
+
 ### `GET /v1/job/:id`
 
 Retrieve object representing job.
 
     {
-      "job_id": "000001",
-      "url": "www.google.com",
-      "status": "complete", // pending, aborted
-      "html": "<html>...</html>"
+      "key": "d5f5b850-a134-11e5-afeb-77f3a90da967", // uuid.v1()
+      "value": {
+        "url": "www.google.com",
+        "status": "completed", // completed | pending
+        "html": "<!DOCTYPE html>...</html>",
+        "created_at": 1449968400470,
+        "fetched_at": 1449968402017
+      }
     }
 
-### `GET /v1/job`
+### `GET /v1/job` **Not Implemented**
 
 Retrieve list of pending jobs.
 
@@ -43,24 +79,3 @@ Retrieve list of pending jobs.
         "status": "pending"
       }
     ]
-
-### `GET /v1/site/:url`
-
-Retrieve HTML for site.
-
-    {
-      "job_id": "000001",
-      "url": "www.google.com",
-      "status": "complete", // pending, etc...
-      "html": "<html>...</html>"
-    }
-
-### `POST /v1/job/:url`
-
-Create new job.
-
-TODO: What if you POST a url that is already completed? Should we timestamp these? Overwrite the old one?
-
-    {
-      "job_id": "000002"
-    }

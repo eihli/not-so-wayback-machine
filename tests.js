@@ -78,8 +78,8 @@ describe('API', function() {
         if (err) {
           console.log(err);
         } else {
-          res.body.should.have.property('url');
-          res.body.url.should.equal('www.google.com');
+          res.body.value.should.have.property('url');
+          res.body.value.url.should.equal('www.google.com');
           done();
         }
     });

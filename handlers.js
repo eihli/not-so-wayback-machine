@@ -15,12 +15,32 @@ function setupHandlers(db) {
     createJob: createJob
   };
 
+  // TODO: I don't think this is needed for MVP requirements.
   function getJobQueue(req, res, next) {
     res.status(200).send();
   }
 
   function getJob(req, res, next) {
-    res.status(200).send();
+    var id = req.params.id;
+    if (id) {
+      db.get(id, function(err, data) {
+        if (err) {
+          if (err.notFound) {
+            res.status(404).send({
+              "error": "id not found"
+            });
+          } else {
+            console.log(err);
+            res.send(err);
+          }
+        } else {
+          res.send(data);
+        }
+      });
+    } else {
+      console.log("No id given");
+      res.send("Give an id");
+    }
   }
 
   function getHtml(req, res, next) {
@@ -38,13 +58,16 @@ function setupHandlers(db) {
   function createJob(req, res, next) {
     var job_id = uuid.v1();
     var job = {
-      url: req.params.url,
-      status: 'pending',
-      html: null,
-      created_at: Date.now(),
-      fetched_at: null
+      key: job_id,
+      value: {
+        url: req.params.url,
+        status: 'pending',
+        html: null,
+        created_at: Date.now(),
+        fetched_at: null
+      }
     };
-    db.put(job_id, job);
+    db.put(job.key, job.value);
     res.status(200).send(job);
   }
 
